@@ -1,0 +1,20 @@
+syntax = "proto3";
+ 
+package proto;
+ 
+option go_package = ".;sendpb";
+ 
+service SendService {
+    rpc Send(stream SendRequest) returns (SendResponse) {}
+    
+}
+ 
+message SendRequest {
+    string mime = 1;
+    bytes chunk = 2;
+}
+ 
+message SendResponse {
+    string name = 1;
+}
+
