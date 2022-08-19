@@ -3,15 +3,20 @@ package saver
 import (
 	"fmt"
 
-	"saving_service/process"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
+type Protocols struct {
+	TCP  int `json: "TCP"`
+	UDP  int `json: "UDP"`
+	IPv4 int `json: "IPv4"`
+	IPv6 int `json: "IPv6"`
+}
+
 type Saver interface {
 	CreateDB(dsn string) error
-	SaveToDB(counter process.Protocols, filepath string) error
+	SaveToDB(counter Protocols, filepath string) error
 }
 
 type DB_Handle struct {
@@ -29,14 +34,14 @@ type file_statistics struct {
 func (h *DB_Handle) CreateDB(dsn string) error {
 	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		fmt.Println("DB error")
+
 		return err
 	}
 	h.DB = DB
 	return nil
 }
 
-func (h DB_Handle) SaveToDB(counter process.Protocols, filePath string) error {
+func (h DB_Handle) SaveToDB(counter Protocols, filePath string) error {
 
 	result := h.DB.Create(&file_statistics{
 
