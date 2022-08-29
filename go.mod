@@ -1,4 +1,4 @@
-module saving_service
+module github.com/whym9/saving_service
 
 go 1.18
 

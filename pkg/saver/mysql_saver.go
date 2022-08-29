@@ -14,11 +14,6 @@ type Protocols struct {
 	IPv6 int `json: "IPv6"`
 }
 
-type Saver interface {
-	CreateDB(dsn string) error
-	SaveToDB(counter Protocols, filepath string) error
-}
-
 type DB_Handle struct {
 	DB *gorm.DB
 }
@@ -31,7 +26,7 @@ type file_statistics struct {
 	IPv6        int
 }
 
-func (h *DB_Handle) CreateDB(dsn string) error {
+func (h DB_Handle) CreateDB(dsn string) error {
 	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 
