@@ -2,7 +2,8 @@ package main
 
 import (
 	"flag"
-	"saving_service/internal/server"
+
+	"github.com/whym9/saving_service/pkg/server"
 )
 
 func main() {

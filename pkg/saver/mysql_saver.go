@@ -26,7 +26,7 @@ type file_statistics struct {
 	IPv6        int
 }
 
-func (h DB_Handle) CreateDB(dsn string) error {
+func (h *DB_Handle) CreateDB(dsn string) error {
 	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 
@@ -36,7 +36,7 @@ func (h DB_Handle) CreateDB(dsn string) error {
 	return nil
 }
 
-func (h DB_Handle) SaveToDB(counter Protocols, filePath string) error {
+func (h *DB_Handle) SaveToDB(counter Protocols, filePath string) error {
 
 	result := h.DB.Create(&file_statistics{
 
