@@ -2,10 +2,7 @@ module github.com/whym9/saving_service
 
 go 1.18
 
-require (
-	google.golang.org/grpc v1.48.0
-	gorm.io/gorm v1.23.8
-)
+require gorm.io/gorm v1.23.8
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -17,15 +14,17 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.37.0 // indirect
 	github.com/prometheus/procfs v0.8.0 // indirect
+	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
+	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/genproto v0.0.0-20200825200019-8632dd797987 // indirect
+	google.golang.org/grpc v1.49.0 // indirect
 )
 
 require (
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/prometheus/client_golang v1.13.0
-	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
+	github.com/prometheus/client_golang v1.13.0 // indirect
+	github.com/whym9/receiving_service v0.0.0-20220902124332-88faf31e027c
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
-	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/genproto v0.0.0-20200825200019-8632dd797987 // indirect
-	google.golang.org/protobuf v1.28.1
+	google.golang.org/protobuf v1.28.1 // indirect
 	gorm.io/driver/mysql v1.3.6
 )

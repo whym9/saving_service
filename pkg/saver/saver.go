@@ -1,6 +1,6 @@
 package saver
 
 type Saver interface {
-	CreateDB(dsn string) error
-	SaveToDB(counter Protocols, filepath string) error
+	Create(name string) error
+	Save(counter []byte, filepath string) error
 }
