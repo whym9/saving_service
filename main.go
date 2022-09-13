@@ -7,8 +7,8 @@ import (
 	receiver "github.com/whym9/receiving_service/pkg/receiver/GRPC"
 
 	"github.com/whym9/saving_service/internal/worker"
-	saver1 "github.com/whym9/saving_service/pkg/saver/file"
-	saver2 "github.com/whym9/saving_service/pkg/saver/mySql"
+
+	saver "github.com/whym9/saving_service/pkg/saver/mySql"
 )
 
 func main() {
@@ -17,15 +17,14 @@ func main() {
 	dir := *flag.String("dir", "files", "directory for saving files")
 	metric_addr := *flag.String("metric_addr", "7007", "address where to run metrics server")
 	flag.Parse()
+
 	ch := make(chan []byte)
 	Promo_Handler := metrics.NewPromoHandler()
 
-	file_saver := saver1.NewFileHandle()
-
-	mysql_saver := saver2.NewDBHandle(Promo_Handler)
+	mysql_saver := saver.NewDBHandle(Promo_Handler)
 	GRPC_server := receiver.NewServer(Promo_Handler, &ch)
 
-	w := worker.NewWorker(Promo_Handler, GRPC_server, file_saver, mysql_saver)
+	w := worker.NewWorker(Promo_Handler, GRPC_server, mysql_saver)
 
 	w.Work(metric_addr, addr, dir, dsn, &ch)
 }

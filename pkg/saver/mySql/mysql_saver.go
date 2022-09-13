@@ -3,6 +3,7 @@ package saver
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/whym9/receiving_service/pkg/metrics"
 	"gorm.io/driver/mysql"
@@ -19,6 +20,8 @@ type Protocols struct {
 type DB_Handle struct {
 	metrics metrics.Metrics
 	DB      *gorm.DB
+	name    string
+	stats   file_statistics
 }
 
 func NewDBHandle(m metrics.Metrics) DB_Handle {
@@ -51,27 +54,48 @@ func (h DB_Handle) Create(dsn string) error {
 }
 
 func (h DB_Handle) Save(data []byte, filePath string) error {
-	counter := Protocols{}
-	err := json.Unmarshal(data, &counter)
+	if h.name != "" {
+		counter := Protocols{}
+		err := json.Unmarshal(data, &counter)
+		if err != nil {
+			h.metrics.Count(key)
+			return err
+		}
+		result := h.DB.Create(&file_statistics{
+
+			Filepath:    h.name,
+			Protocoltcp: counter.TCP,
+			UDP:         counter.UDP,
+			IPv4:        counter.IPv4,
+			IPv6:        counter.IPv6,
+		})
+
+		if result.Error != nil {
+			h.metrics.Count(key)
+			return result.Error
+		}
+		fmt.Println()
+		fmt.Println("Record saved to Database!")
+		fmt.Println()
+		return nil
+	}
+
+	file, err := os.Create(filePath)
+
 	if err != nil {
-		h.metrics.Count(key)
 		return err
 	}
-	result := h.DB.Create(&file_statistics{
 
-		Filepath:    filePath,
-		Protocoltcp: counter.TCP,
-		UDP:         counter.UDP,
-		IPv4:        counter.IPv4,
-		IPv6:        counter.IPv6,
-	})
+	defer file.Close()
 
-	if result.Error != nil {
-		h.metrics.Count(key)
-		return result.Error
+	h.name = filePath
+
+	_, err = file.Write(data)
+
+	if err != nil {
+		return err
 	}
-	fmt.Println()
-	fmt.Println("Record saved to Database!")
-	fmt.Println()
+
 	return nil
+
 }
