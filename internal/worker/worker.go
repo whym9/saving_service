@@ -18,7 +18,7 @@ func NewWorker(m metrics.Metrics, r receiver.Receiver, s saver.Saver) Worker {
 	return Worker{m, r, s}
 }
 
-func (w Worker) Work(metric_addr, addr, dir, dsn string, ch *chan []byte) {
+func (w Worker) Work(metric_addr, addr, dir, dsn string, ch chan []byte) {
 	go w.m.StartMetrics(metric_addr)
 	go w.r.StartServer(addr)
 	w.s.Create(dsn)
@@ -26,12 +26,12 @@ func (w Worker) Work(metric_addr, addr, dir, dsn string, ch *chan []byte) {
 	name := dir + time.Now().Format("02-01-2022-59989898")
 	for {
 
-		data := <-*ch
+		data := <-ch
 
 		err := w.s.Save(data, name)
 
 		if err != nil {
-			*ch <- []byte("could not save: " + err.Error())
+			ch <- []byte("could not save: " + err.Error())
 		}
 
 	}

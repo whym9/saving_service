@@ -22,9 +22,9 @@ func main() {
 	Promo_Handler := metrics.NewPromoHandler()
 
 	mysql_saver := saver.NewDBHandle(Promo_Handler)
-	GRPC_server := receiver.NewServer(Promo_Handler, &ch)
+	GRPC_server := receiver.NewServer(Promo_Handler, ch)
 
 	w := worker.NewWorker(Promo_Handler, GRPC_server, mysql_saver)
 
-	w.Work(metric_addr, addr, dir, dsn, &ch)
+	w.Work(metric_addr, addr, dir, dsn, ch)
 }
