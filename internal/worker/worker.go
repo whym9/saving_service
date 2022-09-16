@@ -23,7 +23,7 @@ func (w Worker) Work(metric_addr, addr, dir, dsn string, ch chan []byte) {
 	go w.r.StartServer(addr)
 	w.s.Create(dsn)
 
-	name := dir + time.Now().Format("02-01-2022-59989898")
+	name := dir + time.Now().Format("01-02-2006-59989898")
 	for {
 
 		data := <-ch
