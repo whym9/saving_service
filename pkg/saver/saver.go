@@ -1,6 +1,6 @@
 package saver
 
 type Saver interface {
-	Create(name string) error
+	Create() error
 	Save(counter []byte, filepath string) error
 }

@@ -42,7 +42,8 @@ var (
 	key  = "errors"
 )
 
-func (h DB_Handle) Create(dsn string) error {
+func (h DB_Handle) Create() error {
+	dsn := os.Getenv("DSN")
 	h.metrics.AddMetrics(name, help, key)
 	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
