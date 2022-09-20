@@ -24,7 +24,11 @@ func (w Worker) Work(ch chan []byte) {
 	go w.r.StartServer()
 	w.s.Create()
 
+<<<<<<< HEAD
 	name := os.Getenv("DIR") + time.Now().Format("02-01-2022-59989898")
+=======
+	name := dir + time.Now().Format("01-02-2006-59989898")
+>>>>>>> 0cca9cb008290ba63be1765116df13f50a947ebf
 	for {
 
 		data := <-ch
