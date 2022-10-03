@@ -3,6 +3,7 @@ package saver
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/whym9/receiving_service/pkg/metrics"
@@ -20,12 +21,20 @@ type Protocols struct {
 type DB_Handle struct {
 	metrics metrics.Metrics
 	DB      *gorm.DB
-	name    string
+	Name    string
 	stats   file_statistics
 }
 
 func NewDBHandle(m metrics.Metrics) DB_Handle {
-	return DB_Handle{metrics: m}
+	dsn := os.Getenv("DSN")
+
+	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		fmt.Println(err.Error())
+		log.Fatal(err.Error())
+	}
+	m.AddMetrics(name, help, key)
+	return DB_Handle{metrics: m, DB: DB}
 }
 
 type file_statistics struct {
@@ -42,29 +51,20 @@ var (
 	key  = "errors"
 )
 
-func (h DB_Handle) Create() error {
-	dsn := os.Getenv("DSN")
-	h.metrics.AddMetrics(name, help, key)
-	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	if err != nil {
-		h.metrics.Count(key)
-		return err
-	}
-	h.DB = DB
-	return nil
-}
-
 func (h DB_Handle) Save(data []byte, filePath string) error {
-	if h.name != "" {
+
+	if err := json.Unmarshal(data, &Protocols{}); err == nil {
+
 		counter := Protocols{}
 		err := json.Unmarshal(data, &counter)
 		if err != nil {
+			fmt.Println(err.Error())
 			h.metrics.Count(key)
 			return err
 		}
 		result := h.DB.Create(&file_statistics{
 
-			Filepath:    h.name,
+			Filepath:    filePath,
 			Protocoltcp: counter.TCP,
 			UDP:         counter.UDP,
 			IPv4:        counter.IPv4,
@@ -73,6 +73,7 @@ func (h DB_Handle) Save(data []byte, filePath string) error {
 
 		if result.Error != nil {
 			h.metrics.Count(key)
+			fmt.Println(err.Error())
 			return result.Error
 		}
 		fmt.Println()
@@ -89,13 +90,13 @@ func (h DB_Handle) Save(data []byte, filePath string) error {
 
 	defer file.Close()
 
-	h.name = filePath
-
 	_, err = file.Write(data)
 
 	if err != nil {
+		fmt.Println(err.Error())
 		return err
 	}
+	fmt.Println("File uploaded")
 
 	return nil
 
