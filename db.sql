@@ -1,12 +1,24 @@
-CREATE DATABASE pcap_files;
+CREATE DATABASE db;
 
-USE pcap_files;
+USE db;
 
-CREATE TABLE File_Statistics (
-    FilePath VARCHAR(256),
-    ProtocolTCP INT,
-    UDP INT,
-    IPv4 INT,
-    IPv6 INT,
-    PRIMARY KEY (FilePath)
-    );
+CREATE TABLE Pcap_Files (
+    FileID INT UNIQUE,
+    FilePath VARCHAR(256) UNIQUE,
+    PRIMARY KEY (FileID)
+);
+
+CREATE TABLE Protocols (
+    ProtocolName VARCHAR(256) UNIQUE, 
+    PRIMARY KEY (ProtocolName) 
+);
+
+
+CREATE TABLE File_Statistic (
+    FilePath VARCHAR (256) UNIQUE,
+    ProtocolName VARCHAR(256) UNIQUE, 
+    FOREIGN KEY (FilePath) REFERENCES Pcap_Files(FilePath) ON DELETE CASCADE,
+    FOREIGN KEY (ProtocolName) REFERENCES Protocols(ProtocolName),
+    PRIMARY KEY (FilePath, ProtocolName),
+    Count INT
+);
