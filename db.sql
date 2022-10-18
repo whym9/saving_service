@@ -24,7 +24,7 @@ CREATE TABLE File_Statistic (
     Count INT
 );
 
-INSERT Protocols(Name) VALUE('TCP');
-INSERT Protocols(Name) VALUE('UDP');
-INSERT Protocols(Name) VALUE('IPv4');
-INSERT Protocols(Name) VALUE('IPv6');
+INSERT Protocols VALUE(0, 'TCP');
+INSERT Protocols(Name) VALUE(1, 'UDP');
+INSERT Protocols(Name) VALUE(2, 'IPv4');
+INSERT Protocols(Name) VALUE(3, 'IPv6');
