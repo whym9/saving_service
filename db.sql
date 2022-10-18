@@ -23,3 +23,8 @@ CREATE TABLE File_Statistic (
     INDEX(FileID, ProtocolID),
     Count INT
 );
+
+INSERT Protocols(Name) VALUE('TCP');
+INSERT Protocols(Name) VALUE('UDP');
+INSERT Protocols(Name) VALUE('IPv4');
+INSERT Protocols(Name) VALUE('IPv6');
