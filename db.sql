@@ -25,6 +25,6 @@ CREATE TABLE File_Statistic (
 );
 
 INSERT Protocols VALUE(0, 'TCP');
-INSERT Protocols(Name) VALUE(1, 'UDP');
-INSERT Protocols(Name) VALUE(2, 'IPv4');
-INSERT Protocols(Name) VALUE(3, 'IPv6');
+INSERT Protocols VALUE(1, 'UDP');
+INSERT Protocols VALUE(2, 'IPv4');
+INSERT Protocols VALUE(3, 'IPv6');
